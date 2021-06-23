@@ -10,7 +10,6 @@ load_dotenv()
 
 logging.basicConfig(
     level=logging.DEBUG,
-    filename='homework.log', filemode='w',
     format='%(asctime)s, %(levelname)s, %(message)s, %(name)s'
 )
 
@@ -43,7 +42,7 @@ def get_homeworks(current_timestamp):
 
 
 def send_message(message):
-    logging.info('message sent')
+    logging.info(f'message sent: {message}')
     return bot.send_message(CHAT_ID, message)
 
 
