@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 logging.basicConfig(
-    level=logging.DEBUG, 
+    level=logging.DEBUG,
     filename='homework.log', filemode='w',
     format='%(asctime)s, %(levelname)s, %(message)s, %(name)s'
 )
@@ -24,6 +24,7 @@ headers = {'Authorization': f'OAuth {PRAKTIKUM_TOKEN}'}
 # и не нужно было прокидывать его в каждый вызов
 bot = telegram.Bot(token=TELEGRAM_TOKEN)
 
+
 def parse_homework_status(homework):
     homework_name = homework['homework_name']
     if homework['status'] != 'approved':
@@ -32,17 +33,22 @@ def parse_homework_status(homework):
         verdict = 'Ревьюеру всё понравилось, работа зачтена!'
     return f'У вас проверили работу "{homework_name}"!\n\n{verdict}'
 
+
 def get_homeworks(current_timestamp):
     params = {'from_date': current_timestamp}
-    homework_statuses = requests.get(Homework_url, headers=headers, params=params)
+    homework_statuses = requests.get(
+        Homework_url, headers=headers, params=params
+    )
     return homework_statuses.json()
+
 
 def send_message(message):
     logging.info('message sent')
     return bot.send_message(CHAT_ID, message)
 
+
 def main():
-    current_timestamp = int(time.time()) # Начальное значение timestamp  
+    current_timestamp = int(time.time())  # Начальное значение timestamp
 
     while True:
         try:
