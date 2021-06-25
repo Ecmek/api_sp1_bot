@@ -28,6 +28,8 @@ def parse_homework_status(homework):
     }
     homework_name = homework.get('homework_name')
     verdict = result.get(homework.get('status'))
+    if not homework_name or not verdict:
+        raise Exception('homework_name or status is None')
     return f'У вас проверили работу "{homework_name}"!\n\n{verdict}'
 
 
@@ -37,17 +39,13 @@ def get_homeworks(current_timestamp):
     )
     headers = {'Authorization': f'OAuth {PRAKTIKUM_TOKEN}'}
     params = {'from_date': current_timestamp}
-    while True:
-        try:
-            homework_statuses = requests.get(
-                homework_url, headers=headers, params=params
-            )
-            return homework_statuses.json()
-
-        except requests.exceptions.HTTPError as e:
-            logger.error(e, exc_info=True)
-            send_message(f'Проблемы на сервере: {e}')
-            time.sleep(60)
+    try:
+        homework_statuses = requests.get(
+            homework_url, headers=headers, params=params
+        )
+        return homework_statuses.json()
+    except requests.exceptions.HTTPError as e:
+        raise e
 
 
 def send_message(message):
