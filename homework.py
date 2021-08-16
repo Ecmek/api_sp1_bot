@@ -29,7 +29,7 @@ def parse_homework_status(homework):
     homework_name = homework.get('homework_name')
     verdict = result.get(homework.get('status'))
     if not homework_name or not verdict:
-        raise Exception('homework_name or status is None')
+        raise Exception(f'homework_name or status is None\n{homework}')
     return f'У вас проверили работу "{homework_name}"!\n\n{verdict}'
 
 
